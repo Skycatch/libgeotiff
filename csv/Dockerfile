@@ -66,7 +66,7 @@ RUN mkdir /vdatum \
     && wget http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj \
     && rm -rf /vdatum
 #
-RUN git clone --depth=1 https://github.com/OSGeo/proj.4.git \
+RUN git clone --depth=1 --branch 5.0 https://github.com/OSGeo/proj.4.git \
     &&    cd proj.4 \
     &&    ./autogen.sh \
     && ./configure --prefix=/usr \
@@ -74,7 +74,7 @@ RUN git clone --depth=1 https://github.com/OSGeo/proj.4.git \
     && make -j 4 \
     && make install
 
-RUN svn co https://svn.osgeo.org/metacrs/geotiff/trunk/libgeotiff/  \
+RUN git clone --depth=1 --branch master https://github.com/Skycatch/libgeotiff.git \
     && cd libgeotiff \
     && ./autogen.sh \
     && ./configure --prefix=/usr \
