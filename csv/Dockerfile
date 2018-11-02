@@ -32,7 +32,7 @@ ADD filegdb_api_1_3-64.tar.gz /
 RUN cp -r /FileGDB_API/lib/* /usr/lib
 
 
-RUN git clone --depth=1 https://github.com/OSGeo/gdal.git \
+RUN git clone --depth=1 --branch v2.2.4 https://github.com/OSGeo/gdal.git \
     &&    cd gdal/gdal \
     && CXXFLAGS="-D_GLIBCXX_USE_CXX11_ABI=0" ./configure --prefix=/usr \
             --mandir=/usr/share/man \
@@ -81,23 +81,23 @@ RUN git clone --depth=1 --branch master https://github.com/Skycatch/libgeotiff.g
     && make \
     && make install
 
-RUN wget http://www.epsg.org/Portals/0/EPSG%20files/v9-0/epsg-v9_0sql-PostgreSQL.zip -O temp.zip \
+RUN wget http://www.epsg-registry.org//export.htm?contentType=PostgreSQL -O temp.zip \
     && unzip temp.zip \
     && rm temp.zip
 
 RUN apt-get update && apt-get install -y --fix-missing --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-RUN sed -i '1s/^/\\encoding WIN1252\nBEGIN;\n/' EPSG*_Data_PostgreSQL.sql \
-    && echo "COMMIT;" | cat EPSG*_Data_PostgreSQL.sql - > EPSG_Data_PostgreSQL.sql.tmp \
-    && mv EPSG_Data_PostgreSQL.sql.tmp EPSG*_Data_PostgreSQL.sql \
-    && sed -i -- 's/254/300/g' EPSG*_Tables_PostgreSQL.sql
+# RUN sed -i '1s/^/\\encoding WIN1252\nBEGIN;\n/' PostgreSQL_Data_Script.sql \
+#     && echo "COMMIT;" | cat PostgreSQL_Data_Script.sql - > PostgreSQL_Data_Script.sql.tmp \
+#     && mv PostgreSQL_Data_Script.sql.tmp PostgreSQL_Data_Script.sql \
+RUN sed -i -- 's/254/300/g' PostgreSQL_Table_Script.sql
 
 RUN service postgresql start ; \
     sudo -u postgres createuser root -s \
     && createdb -E UTF8 -T template0 epsg \
-    && psql epsg -f EPSG*_Tables_PostgreSQL.sql \
-    && psql epsg -f EPSG*_Data_PostgreSQL.sql \
+    && psql epsg -f PostgreSQL_Table_Script.sql \
+    && psql epsg -f PostgreSQL_Data_Script.sql \
     && service postgresql stop
 
 RUN service postgresql start ; \
