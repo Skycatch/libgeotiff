@@ -108,6 +108,8 @@ class CSVTable:
             
             if len(line) > 2:
                 key, rest = line.split( ',', 1 )
+                if key[0] == '"':
+                    key = key[1:-1]
                 key = int(key)
                 if multi:
                     if key in self.data:
