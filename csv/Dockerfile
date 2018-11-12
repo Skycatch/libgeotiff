@@ -31,7 +31,6 @@ ADD filegdb_api_1_3-64.tar.gz /
 
 RUN cp -r /FileGDB_API/lib/* /usr/lib
 
-
 RUN git clone --depth=1 --branch v2.2.4 https://github.com/OSGeo/gdal.git \
     &&    cd gdal/gdal \
     && CXXFLAGS="-D_GLIBCXX_USE_CXX11_ABI=0" ./configure --prefix=/usr \
