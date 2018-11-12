@@ -1,5 +1,4 @@
 FROM ubuntu:16.04
-MAINTAINER Howard Butler <howard@hobu.co>
 
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 16126D3A3E5C1192
 RUN apt-get update -qq
@@ -124,5 +123,3 @@ RUN service postgresql start ; \
     && /gdal/gdal/swig/python/scripts/epsg_tr.py --config OVERRIDE_PROJ_DATUM_WITH_TOWGS84 FALSE -postgis -skip -list geoccs.csv >> spatial_ref_sys.sql \
     && /gdal/gdal/swig/python/scripts/epsg_tr.py --config OVERRIDE_PROJ_DATUM_WITH_TOWGS84 FALSE -postgis -skip -list compdcs.csv >> spatial_ref_sys.sql \
     && service postgresql stop
-
-#
