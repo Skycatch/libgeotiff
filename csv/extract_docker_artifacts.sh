@@ -1,9 +1,11 @@
 #!/bin/bash
 
+docker_image=${1}
+
 rm -rf artifacts
 mkdir -p artifacts/gdal  artifacts/postgis artifacts/proj artifacts/libgeotiff
 container="projcontainer"
-docker run --name $container hobu/proj.4  tail -f /dev/null &
+docker run --name $container ${docker_image} tail -f /dev/null &
 
 # wait for the container to wake up
 sleep 5
